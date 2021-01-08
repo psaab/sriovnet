@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/vishvananda/netlink"
 
-	utilfs "github.com/Mellanox/sriovnet/pkg/utils/filesystem"
+	utilfs "github.com/psaab/sriovnet/pkg/utils/filesystem"
 )
 
 const (
@@ -303,15 +303,19 @@ func ConfigVfs(handle *PfNetdevHandle, privileged bool) error {
 		log.Printf("vf = %v\n", vf)
 		err = setPortAdminState(handle, vf)
 		if err != nil {
+			log.Printf("ConfigVfs setPortAdminState error = %v", err)
 			break
 		}
 		// skip VFs in another namespace
 		netdevName := vfNetdevNameFromParent(handle.PfNetdevName, vf.Index)
+		log.Printf("netdevName = %v\n", netdevName)
 		if _, err = netlink.LinkByName(netdevName); err != nil {
+			log.Printf("ConfigVfs netlink.LinkByName(%s) error = %v",netdevName, err)
 			continue
 		}
 		err = setDefaultHwAddr(handle, vf)
 		if err != nil {
+			log.Printf("ConfigVfs setDefaultHwAddr  error = %v", err)
 			break
 		}
 		_ = SetVfPrivileged(handle, vf, privileged)

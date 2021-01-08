@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	utilfs "github.com/Mellanox/sriovnet/pkg/utils/filesystem"
+	utilfs "github.com/psaab/sriovnet/pkg/utils/filesystem"
 )
 
 const (
